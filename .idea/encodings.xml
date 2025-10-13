@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-client/topic-client-ai/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-client/topic-client-security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-client/topic-client-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-client/topic-client-topic/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-common/topic-common-security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-common/topic-common-utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-common/topic-service-utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-gateway/admin-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-gateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-gateway/web-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-model/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-service/topic-service-ai/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-service/topic-service-order/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-service/topic-service-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java" charset="UTF-8" />
+  </component>
+</project>

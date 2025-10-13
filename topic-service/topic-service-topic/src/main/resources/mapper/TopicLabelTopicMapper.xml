@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ey.topic.topic.mapper.TopicLabelTopicMapper">
+    <insert id="insertBatch" >
+        INSERT INTO topic_label_topic (label_id,topic_id)
+        VALUES
+        <foreach collection="topicLabelTopics" item="item" separator=",">
+            (#{item.labelId}, #{item.topicId})
+        </foreach>
+    </insert>
+</mapper>

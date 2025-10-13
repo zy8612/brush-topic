@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="topic-model" />
+        <module name="web-gateway" />
+        <module name="admin-gateway" />
+        <module name="topic-service-ai" />
+        <module name="topic-service-topic" />
+        <module name="topic-client-system" />
+        <module name="topic-common-utils" />
+        <module name="topic-client-topic" />
+        <module name="topic-security" />
+        <module name="topic-client-ai" />
+        <module name="topic-service-system" />
+        <module name="topic-common-security" />
+        <module name="topic-client-security" />
+        <module name="topic-service-order" />
+        <module name="topic-service-utils" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="admin-gateway" options="-parameters" />
+      <module name="topic-client-ai" options="-parameters" />
+      <module name="topic-client-security" options="-parameters" />
+      <module name="topic-client-system" options="-parameters" />
+      <module name="topic-client-topic" options="-parameters" />
+      <module name="topic-common-security" options="-parameters" />
+      <module name="topic-common-utils" options="-parameters" />
+      <module name="topic-model" options="-parameters" />
+      <module name="topic-security" options="-parameters" />
+      <module name="topic-service-ai" options="-parameters" />
+      <module name="topic-service-order" options="-parameters" />
+      <module name="topic-service-system" options="-parameters" />
+      <module name="topic-service-topic" options="-parameters" />
+      <module name="topic-service-utils" options="-parameters" />
+      <module name="web-gateway" options="-parameters" />
+    </option>
+  </component>
+</project>

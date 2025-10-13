@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ey.topic.topic.mapper.TopicRecordMapper">
+
+    <select id="countTopicFrequency" resultType="java.lang.Long">
+        SELECT sum(count) as count
+        FROM topic_record
+        <where>
+            <if test="date != null and date != ''">
+                topic_time = #{date}
+            </if>
+        </where>
+    </select>
+
+    <select id="countTopicDay15" resultType="com.ey.model.vo.topic.TopicDataVo">
+        WITH RECURSIVE dates AS (SELECT CURDATE() - INTERVAL 14 DAY AS date_value
+                                 UNION ALL
+                                 SELECT date_value + INTERVAL 1 DAY
+                                 FROM dates
+                                 WHERE date_value &lt; CURDATE())
+        SELECT d.date_value           AS date,
+               IFNULL(topic_count, 0) AS count
+        FROM dates d
+                 LEFT JOIN (SELECT DATE(topic_time) AS topic_date, COUNT(id) AS topic_count
+                            FROM topic_record
+                            WHERE topic_time >= CURDATE() - INTERVAL 14 DAY
+                            GROUP BY DATE(topic_time)) temp
+                           ON temp.topic_date = d.date_value
+        ORDER BY d.date_value;
+    </select>
+
+    <select id="countUserDay15" resultType="com.ey.model.vo.topic.TopicDataVo">
+        WITH RECURSIVE dates AS (SELECT CURDATE() - INTERVAL 14 DAY AS date_value
+                                 UNION ALL
+                                 SELECT date_value + INTERVAL 1 DAY
+                                 FROM dates
+                                 WHERE date_value &lt; CURDATE())
+        SELECT d.date_value          AS date,
+               IFNULL(user_count, 0) AS count
+        FROM dates d
+                 LEFT JOIN (SELECT DATE(topic_time) AS topic_date, COUNT(DISTINCT user_id) AS user_count
+                            FROM topic_record
+                            WHERE topic_time >= CURDATE() - INTERVAL 14 DAY
+                            GROUP BY DATE(topic_time)) temp
+                           ON temp.topic_date = d.date_value
+        ORDER BY d.date_value;
+    </select>
+
+    <!-- 查询用户总刷题数 -->
+    <select id="countTopicUserRecord" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT sum(count)
+        FROM topic_record
+        WHERE user_id = #{currentId}
+    </select>
+
+    <select id="getRank" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT `rank`
+        FROM (SELECT user_id,
+                     RANK() OVER (ORDER BY SUM(count) DESC) AS `rank`
+              FROM topic_record
+              GROUP BY user_id) AS ranked_users
+        WHERE user_id = #{userId};
+    </select>
+
+    <!-- 根据日期查用户排名 -->
+    <select id="getDateRank" resultType="java.lang.Long">
+        SELECT `rank`
+        FROM (SELECT user_id,
+                     RANK() OVER (ORDER BY SUM(count) DESC) AS `rank`
+              FROM topic_record
+              where topic_time = #{date}
+              GROUP BY user_id) AS ranked_users
+        WHERE user_id = #{currentId}
+    </select>
+
+    <!-- 统计用户最长连续刷题天数 -->
+    <select id="selectMaximumCount" resultType="java.lang.Long" parameterType="java.lang.Long">
+        WITH user_days
+                 AS (SELECT DATE(topic_time) -
+                            INTERVAL ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY topic_time) DAY AS grp
+                     FROM topic_record
+                     WHERE user_id = #{currentId}),
+             user_streaks AS (SELECT COUNT(*) AS streak_length
+                              FROM user_days
+                              GROUP BY grp)
+        SELECT COALESCE(max(streak_length), 0) AS max_streak_length
+        FROM user_streaks
+    </select>
+
+    <!-- 查询用户最近连续刷题多少天 -->
+    <select id="selectRecentConsecutiveCount" resultType="java.lang.Long" parameterType="java.lang.Long">
+        WITH user_days AS (SELECT topic_time,
+                                  DATE(topic_time) - ROW_NUMBER() OVER (ORDER BY topic_time) AS grp
+                           FROM (SELECT DISTINCT DATE(topic_time) AS topic_time
+                                 FROM topic_record
+                                 WHERE user_id = #{currentId}) AS distinct_days),
+             streaks AS (SELECT COUNT(*)        AS streak_length,
+                                MAX(topic_time) AS end_date
+                         FROM user_days
+                         GROUP BY grp)
+        SELECT COALESCE(streak_length, 0) AS recent_streak_length
+        FROM streaks
+        ORDER BY end_date DESC
+        LIMIT 1;
+    </select>
+
+    <select id="getTopicRecordIds" resultType="java.lang.Long">
+        SELECT topic_id
+        FROM topic_record
+        WHERE user_id = #{userId}
+        AND subject_id IN
+        <foreach collection="subjectIds" open="(" item="subjectId" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        GROUP BY topic_id;
+    </select>
+
+    <!-- 根据年份查询用户每日刷题次数 -->
+    <select id="userTopicDateCount" resultType="com.ey.model.vo.topic.TopicDataVo">
+        SELECT DATE(topic_time) AS date,
+               SUM(count)       AS count
+        FROM topic_record
+        WHERE topic_time BETWEEN #{startDate} AND #{endDate}
+          AND user_id = #{userId}
+        GROUP BY DATE(topic_time)
+        ORDER BY date
+    </select>
+
+    <select id="getCountRank" resultType="com.ey.model.vo.topic.TopicUserRankVo">
+        SELECT
+        RANK() OVER (ORDER BY user_scores.total_count DESC) AS `rank`,
+        user_scores.user_id AS userId,
+        user_scores.total_count AS scope,
+        IF(users.nickname IS NULL OR users.nickname = '', users.account, users.nickname) AS nickname,
+        users.avatar,
+        user_roles.role_key AS role,
+        user_scores.topic_time AS topicTime
+        FROM (SELECT user_id,
+        SUM(count) as total_count,
+        topic_time
+        FROM topic_record
+        <where>
+            <if test="date != null and date != ''">
+                topic_time = #{date}
+            </if>
+        </where>
+        GROUP BY user_id, topic_time) AS user_scores
+        JOIN sys_user AS users ON users.id = user_scores.user_id
+        LEFT JOIN (SELECT user_id,
+        r.role_key,
+        MIN(ur.role_id) AS role_id
+        FROM sys_user_role AS ur
+        JOIN sys_role r ON ur.role_id = r.id
+        GROUP BY user_id, r.role_key
+        ) AS user_roles ON users.id = user_roles.user_id
+        ORDER BY `rank`
+    </select>
+
+    <select id="getUserTodayRank" resultType="com.ey.model.vo.topic.TopicUserRankVo">
+        SELECT user_scores.`rank`                              AS `rank`,
+               user_scores.user_id                                                              AS userId,
+               user_scores.total_count                                                          AS scope,
+               IF(users.nickname IS NULL OR users.nickname = '', users.account, users.nickname) AS nickname,
+               users.avatar,
+               user_roles.role_key                                                              AS role,
+               user_scores.topic_time                                                           AS topicTime
+        FROM (SELECT user_id,
+                     SUM(count) AS total_count,
+                     RANK() OVER (ORDER BY SUM(count) DESC) AS `rank`,
+                     topic_time
+              FROM topic_record
+              WHERE topic_time = #{date}
+              GROUP BY user_id, topic_time) AS user_scores
+                 JOIN sys_user AS users ON users.id = user_scores.user_id
+                 LEFT JOIN (SELECT user_id,
+                                   r.role_key,
+                                   MIN(ur.role_id) AS role_id
+                            FROM sys_user_role AS ur
+                                     JOIN sys_role r ON ur.role_id = r.id
+                            GROUP BY user_id, r.role_key) AS user_roles ON users.id = user_roles.user_id
+        WHERE user_roles.user_id = #{userId}
+    </select>
+
+    <select id="getUserTotalRank" resultType="com.ey.model.vo.topic.TopicUserRankVo">
+        SELECT user_scores.`rank`                              AS `rank`,
+               user_scores.user_id                                                              AS userId,
+               user_scores.total_count                                                          AS scope,
+               IF(users.nickname IS NULL OR users.nickname = '', users.account, users.nickname) AS nickname,
+               users.avatar,
+               user_roles.role_key                                                              AS role,
+               NULL                                                                             AS topicTime
+        FROM (SELECT user_id,
+                     RANK() OVER (ORDER BY SUM(count) DESC) AS `rank`,
+                     SUM(count) AS total_count
+              FROM topic_record
+              GROUP BY user_id) AS user_scores
+                 JOIN sys_user AS users ON users.id = user_scores.user_id
+                 LEFT JOIN (SELECT user_id,
+                                   r.role_key,
+                                   MIN(ur.role_id) AS role_id
+                            FROM sys_user_role AS ur
+                                     JOIN sys_role r ON ur.role_id = r.id
+                            GROUP BY user_id, r.role_key) AS user_roles ON users.id = user_roles.user_id
+        WHERE user_roles.user_id = #{userId}
+    </select>
+
+    <select id="selectMaxSubject" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT t.subject_id
+        FROM (SELECT subject_id,
+                     COUNT(*)        AS num_topics,
+                     MAX(topic_time) AS latest_time
+              FROM topic_record
+              WHERE user_id = #{id}
+              GROUP BY subject_id) t
+        ORDER BY t.num_topics DESC, t.latest_time DESC
+        LIMIT 1;
+    </select>
+
+
+</mapper>

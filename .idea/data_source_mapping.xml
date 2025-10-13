@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/3b9bb91c-9d1b-482f-ac4e-076bfe8c37e4/console.sql" value="3b9bb91c-9d1b-482f-ac4e-076bfe8c37e4" />
+    <file url="file://$PROJECT_DIR$/topic-service/topic-service-topic/src/main/resources/mapper/TopicRecordMapper.xml" value="3b9bb91c-9d1b-482f-ac4e-076bfe8c37e4" />
+  </component>
+</project>

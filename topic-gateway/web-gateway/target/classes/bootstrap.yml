@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: web-gateway
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      #将网关服务注册到 Nacos，使其他服务可以发现并调用它
+      discovery:
+        server-addr: http://192.168.92.129:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: http://192.168.92.129:8848
+        username: nacos
+        password: nacos
+        #配置文件前缀，默认使用应用名
+        prefix: ${spring.application.name}
+        file-extension: yaml
+        #共享配置（多个服务共用的配置）
+        shared-configs:
+          - data-id: common-config.yaml #共享配置的Data ID
+            group: DEFAULT_GROUP
+            refresh: true
+    compatibility-verifier:
+      enabled: false

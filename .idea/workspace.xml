@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dd458da6-c13b-4956-8651-a5261b51d454" name="更改" comment="brush-topic" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="customMavenHome" value="D:\DevApps\Maven\apache-maven-3.9.10" />
+        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
+        <option name="userSettingsFile" value="D:\DevApps\Maven\apache-maven-3.9.10\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2zv0o5uVx8tsn5QNPzcxvwXKmQy" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "Spring Boot.AdminGatewayApplication.executor": "Run",
+    "Spring Boot.TopicAiApplication.executor": "Run",
+    "Spring Boot.TopicOrderApplication.executor": "Run",
+    "Spring Boot.TopicSecurityApplication.executor": "Run",
+    "Spring Boot.TopicSystemApplication.executor": "Run",
+    "Spring Boot.TopicTopicApplication.executor": "Run",
+    "Spring Boot.WebGatewayApplication.executor": "Run",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/DevApps/ProjectCode/brush-topic/brush-topic-backend/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/mapper",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "D:/DevApps/ProjectCode/brush-topic/brush-topic-backend/topic-service/topic-service-pay/src/main/java/com/ey/Main.java",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.AdminGatewayApplication.executor": "Run"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\DevApps\ProjectCode\brush-topic\brush-topic-backend\topic-service\topic-service-topic\src\main\java\com\ey\topic\topic\mapper" />
+      <recent name="D:\DevApps\ProjectCode\brush-topic\brush-topic-backend\topic-service\topic-service-ai\src\main\java\com\ey\topic\ai\mapper" />
+      <recent name="D:\DevApps\ProjectCode\brush-topic\brush-topic-backend\topic-service\topic-service-ai\src\main\java\com\ey\topic\ai" />
+      <recent name="D:\DevApps\ProjectCode\brush-topic\brush-topic-backend" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ey.topic.order" />
+      <recent name="com.ey.topic.system.mapper" />
+      <recent name="com.ey.web.gateway" />
+      <recent name="com.ey.model.entity.topic" />
+      <recent name="com.ey.topic.ai" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="configurationStatuses">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <map>
+              <entry key="AdminGatewayApplication" value="STOPPED" />
+              <entry key="TopicAiApplication" value="STOPPED" />
+              <entry key="TopicOrderApplication" value="STOPPED" />
+              <entry key="TopicSecurityApplication" value="STOPPED" />
+              <entry key="TopicSystemApplication" value="STOPPED" />
+              <entry key="TopicTopicApplication" value="STOPPED" />
+              <entry key="WebGatewayApplication" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.TopicTopicApplication">
+    <configuration name="AdminGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="admin-gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.admin.gateway.AdminGatewayApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ey.admin.gateway.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TopicAiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="topic-service-ai" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.topic.ai.TopicAiApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ey.topic.ai.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TopicOrderApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="topic-service-order" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.topic.order.TopicOrderApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TopicSecurityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="topic-security" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.security.TopicSecurityApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ey.security.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TopicSystemApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="topic-service-system" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.topic.system.TopicSystemApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ey.topic.system.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TopicTopicApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="topic-service-topic" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.topic.topic.TopicTopicApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WebGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="web-gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ey.web.gateway.WebGatewayApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ey.web.gateway.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.TopicAiApplication" />
+        <item itemvalue="Spring Boot.AdminGatewayApplication" />
+        <item itemvalue="Spring Boot.WebGatewayApplication" />
+        <item itemvalue="Spring Boot.TopicSecurityApplication" />
+        <item itemvalue="Spring Boot.TopicSystemApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="dd458da6-c13b-4956-8651-a5261b51d454" name="更改" comment="" />
+      <created>1751815013815</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751815013815</updated>
+      <workItem from="1751815014873" duration="251000" />
+      <workItem from="1752596412435" duration="233000" />
+      <workItem from="1752596654136" duration="306000" />
+      <workItem from="1752630475836" duration="2110000" />
+      <workItem from="1752632618222" duration="31195000" />
+      <workItem from="1752719391835" duration="34623000" />
+      <workItem from="1752810517911" duration="11153000" />
+      <workItem from="1752831611490" duration="13509000" />
+      <workItem from="1752892713729" duration="19994000" />
+      <workItem from="1752927807182" duration="10820000" />
+      <workItem from="1752980905915" duration="32352000" />
+      <workItem from="1753706846222" duration="711000" />
+      <workItem from="1753874882508" duration="3380000" />
+      <workItem from="1753889653061" duration="5553000" />
+      <workItem from="1753938574898" duration="11074000" />
+      <workItem from="1753976002547" duration="5414000" />
+      <workItem from="1754026179129" duration="19081000" />
+      <workItem from="1754112520655" duration="13773000" />
+      <workItem from="1754134849250" duration="9424000" />
+      <workItem from="1754200890070" duration="14974000" />
+      <workItem from="1754391091179" duration="599000" />
+      <workItem from="1754399852223" duration="7643000" />
+      <workItem from="1754457662169" duration="8740000" />
+      <workItem from="1754489839606" duration="3045000" />
+      <workItem from="1754497003263" duration="2641000" />
+      <workItem from="1754553438237" duration="15680000" />
+      <workItem from="1754633804080" duration="13351000" />
+      <workItem from="1754716970607" duration="8270000" />
+      <workItem from="1754734960777" duration="8355000" />
+      <workItem from="1754759164486" duration="680000" />
+      <workItem from="1754812340280" duration="8865000" />
+      <workItem from="1754874902029" duration="626000" />
+      <workItem from="1754897501185" duration="14033000" />
+      <workItem from="1754963226581" duration="9000" />
+      <workItem from="1754965399711" duration="17585000" />
+      <workItem from="1755013772139" duration="445000" />
+      <workItem from="1755014246462" duration="14000" />
+      <workItem from="1755065348932" duration="6224000" />
+      <workItem from="1755080518016" duration="51000" />
+      <workItem from="1755080584046" duration="7118000" />
+      <workItem from="1755097186561" duration="643000" />
+      <workItem from="1755101812077" duration="1460000" />
+      <workItem from="1755150591966" duration="14017000" />
+      <workItem from="1755184860086" duration="122000" />
+      <workItem from="1755184991737" duration="3446000" />
+      <workItem from="1755235053889" duration="2077000" />
+      <workItem from="1755243583187" duration="14528000" />
+      <workItem from="1755275160819" duration="1639000" />
+      <workItem from="1755322753212" duration="10212000" />
+      <workItem from="1755353180794" duration="5163000" />
+      <workItem from="1755416535219" duration="27323000" />
+      <workItem from="1755495257594" duration="6453000" />
+      <workItem from="1755503087398" duration="7961000" />
+      <workItem from="1755520441851" duration="294000" />
+      <workItem from="1755520750623" duration="9703000" />
+      <workItem from="1755584727601" duration="6032000" />
+      <workItem from="1755604575652" duration="4807000" />
+      <workItem from="1755786937335" duration="1706000" />
+      <workItem from="1755937491533" duration="1842000" />
+      <workItem from="1756196843433" duration="628000" />
+      <workItem from="1756283832380" duration="1214000" />
+      <workItem from="1756395117351" duration="47000" />
+      <workItem from="1756901015308" duration="3000" />
+      <workItem from="1757140686953" duration="670000" />
+      <workItem from="1757291889540" duration="320000" />
+      <workItem from="1757292267339" duration="696000" />
+      <workItem from="1757293049882" duration="4000" />
+      <workItem from="1757341562512" duration="266000" />
+      <workItem from="1758007362512" duration="681000" />
+      <workItem from="1758289253363" duration="811000" />
+      <workItem from="1758290194002" duration="4000" />
+      <workItem from="1758815353947" duration="424000" />
+      <workItem from="1758862386743" duration="1860000" />
+      <workItem from="1758939106089" duration="2688000" />
+      <workItem from="1759108422645" duration="1272000" />
+      <workItem from="1759113292335" duration="7000" />
+      <workItem from="1759420941020" duration="312000" />
+      <workItem from="1759548721926" duration="1333000" />
+      <workItem from="1759564697668" duration="1836000" />
+      <workItem from="1759661255543" duration="2221000" />
+      <workItem from="1759719399699" duration="1195000" />
+      <workItem from="1759809739950" duration="1848000" />
+      <workItem from="1759970010552" duration="625000" />
+      <workItem from="1760056036529" duration="1025000" />
+      <workItem from="1760143041087" duration="1789000" />
+      <workItem from="1760196683413" duration="1878000" />
+      <workItem from="1760255436780" duration="15114000" />
+      <workItem from="1760315726142" duration="4046000" />
+      <workItem from="1760324889556" duration="108000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="brush-topic" />
+    <option name="LAST_COMMIT_MESSAGE" value="brush-topic" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ey/Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ClassCastException" package="java.lang" />
+          <option name="timeStamp" value="18" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.lang.String" memberName="value" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>
