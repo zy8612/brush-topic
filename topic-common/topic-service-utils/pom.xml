@@ -23,7 +23,7 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>7.1.0</version>
+            <version>8.6.0</version>
         </dependency>
         <!-- 通用模块 -->
         <dependency>

@@ -28,7 +28,7 @@
         <bootstrap.version>4.0.2</bootstrap.version>
         <hutool.version>5.8.26</hutool.version>
         <jwt.version>3.4.0</jwt.version>
-        <commons.lang3.version>3.4</commons.lang3.version>
+        <commons.lang3.version>3.18.0</commons.lang3.version>
         <!-- bug3.5.3版本问题 -->
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <!-- 解决jwt令牌因为jdk版本 -->
