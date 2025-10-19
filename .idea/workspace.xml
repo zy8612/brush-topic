@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd458da6-c13b-4956-8651-a5261b51d454" name="更改" comment="brush-topic" />
+    <list default="true" id="dd458da6-c13b-4956-8651-a5261b51d454" name="更改" comment="brush-topic">
+      <change afterPath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/resources/mapper/TopicDailyStagingMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b9bb91c-9d1b-482f-ac4e-076bfe8c37e4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b9bb91c-9d1b-482f-ac4e-076bfe8c37e4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic-service/topic-service-ai/target/classes/com/ey/topic/ai/service/strategy/chat/ChatStrategyFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/topic-service/topic-service-ai/target/classes/com/ey/topic/ai/service/strategy/chat/ChatStrategyFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/mapper/TopicDailyStagingMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/mapper/TopicDailyStagingMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/service/impl/TopicDataServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/service/impl/TopicDataServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/task/TopicTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/topic-service/topic-service-topic/src/main/java/com/ey/topic/topic/task/TopicTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic-service/topic-service-topic/target/classes/com/ey/topic/topic/service/impl/TopicDataServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/topic-service/topic-service-topic/target/classes/com/ey/topic/topic/service/impl/TopicDataServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/topic-service/topic-service-topic/target/classes/com/ey/topic/topic/task/TopicTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/topic-service/topic-service-topic/target/classes/com/ey/topic/topic/task/TopicTask.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +33,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;zy8612&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/zy8612/brush-topic&quot;,
+    &quot;accountId&quot;: &quot;80af73d8-185b-4216-9118-26f615dd721d&quot;
+  }
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -49,6 +72,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.AdminGatewayApplication.executor": "Run",
     "Spring Boot.TopicAiApplication.executor": "Run",
     "Spring Boot.TopicOrderApplication.executor": "Run",
@@ -205,11 +229,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.TopicAiApplication" />
-        <item itemvalue="Spring Boot.AdminGatewayApplication" />
         <item itemvalue="Spring Boot.WebGatewayApplication" />
         <item itemvalue="Spring Boot.TopicSecurityApplication" />
+        <item itemvalue="Spring Boot.TopicAiApplication" />
         <item itemvalue="Spring Boot.TopicSystemApplication" />
+        <item itemvalue="Spring Boot.AdminGatewayApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -317,13 +341,47 @@
       <workItem from="1760255436780" duration="15114000" />
       <workItem from="1760315726142" duration="4046000" />
       <workItem from="1760324889556" duration="108000" />
+      <workItem from="1760325003239" duration="477000" />
+      <workItem from="1760325958697" duration="5000" />
+      <workItem from="1760364586712" duration="1877000" />
+      <workItem from="1760401964969" duration="4175000" />
+      <workItem from="1760434557664" duration="596000" />
+      <workItem from="1760448349639" duration="1262000" />
+      <workItem from="1760602573513" duration="700000" />
+      <workItem from="1760660805745" duration="1949000" />
+      <workItem from="1760671006868" duration="2739000" />
+      <workItem from="1760802450642" duration="3639000" />
+      <workItem from="1760845638495" duration="17261000" />
     </task>
+    <task id="LOCAL-00001" summary="brush-topic">
+      <option name="closed" value="true" />
+      <created>1760325381986</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1760325381986</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
     <MESSAGE value="brush-topic" />
     <option name="LAST_COMMIT_MESSAGE" value="brush-topic" />
   </component>

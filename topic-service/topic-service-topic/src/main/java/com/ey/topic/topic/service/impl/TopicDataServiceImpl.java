@@ -196,21 +196,26 @@ public class TopicDataServiceImpl implements TopicDataService {
     /**
      * 查询每日必刷
      *
-     * @return
+     * @return+
      */
     @Override
     public List<TopicTodayVo> topicTodayVo() {
-        // 查询公共的题目
-        LambdaQueryWrapper<TopicDailyStaging> stagingQueryWrapper = new LambdaQueryWrapper<>();
-        stagingQueryWrapper.eq(TopicDailyStaging::getIsPublic, 1);
-        List<TopicDailyStaging> topicList = topicDailyStagingMapper.selectList(stagingQueryWrapper);
-        // 查询用户的
+        String role = SecurityUtils.getCurrentRole();
         Long currentId = SecurityUtils.getCurrentId();
-        LambdaQueryWrapper<TopicDailyStaging> userQueryWrapper = new LambdaQueryWrapper<>();
-        userQueryWrapper.eq(TopicDailyStaging::getIsPublic, 2)
-                .eq(TopicDailyStaging::getUserId, currentId);
-        List<TopicDailyStaging> topicList1 = topicDailyStagingMapper.selectList(userQueryWrapper);
-        topicList.addAll(topicList1);
+        List<TopicDailyStaging> topicList = new ArrayList<>();
+        // 用户总能刷公共题
+        if(RoleEnum.USER.getRoleKey().equals(role)){
+            // 查询公共的题目
+            LambdaQueryWrapper<TopicDailyStaging> stagingQueryWrapper = new LambdaQueryWrapper<>();
+            stagingQueryWrapper.eq(TopicDailyStaging::getIsPublic, 1);
+            topicList = topicDailyStagingMapper.selectList(stagingQueryWrapper);
+        } else if(RoleEnum.MEMBER.getRoleKey().equals(role)){
+            // 查询会员的
+            LambdaQueryWrapper<TopicDailyStaging> userQueryWrapper = new LambdaQueryWrapper<>();
+            userQueryWrapper.eq(TopicDailyStaging::getIsPublic, 2)
+                    .eq(TopicDailyStaging::getUserId, currentId);
+            topicList = topicDailyStagingMapper.selectList(userQueryWrapper);
+        }
         // 遍历封装返回数据
         return topicList.stream().map(topicDailyStaging -> {
             // 封装返回数据

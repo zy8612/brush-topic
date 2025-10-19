@@ -15,9 +15,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Description: 题目相关定时任务
@@ -38,7 +37,7 @@ public class TopicTask {
     private final TopicDailyBrushMapper topicDailyBrushMapper;
 
     /**
-     * 每天凌晨 12:00 执行 - 查询排行榜数据并重新写入Redis防止redis挂了导致数据丢失
+     * 每分钟执行 - 查询排行榜数据并重新写入Redis防止redis挂了导致数据丢失
      */
     @Scheduled(cron = "0 * * * * ?") // 1分钟
     public void refreshRankingToRedis() {
@@ -70,7 +69,7 @@ public class TopicTask {
      * 每天凌晨 12:00 执行 - 删除用户每日必刷并将所有用户的每日必刷题数据写入Redis和数据库
      */
     @Scheduled(cron = "0 0 0 * * ?")
-    // @Scheduled(cron = "0 * * * * ?") // 1分钟
+    //@Scheduled(cron = "0 * * * * ?") // 1分钟
     public void refreshUserTopicToRedis() {
         // 删除所有数据
         int delete1 = topicDailyBrushMapper.delete(null);
@@ -82,228 +81,166 @@ public class TopicTask {
         topicLambdaQueryWrapper.eq(Topic::getIsMember, 0);
         topicLambdaQueryWrapper.eq(Topic::getStatus, StatusEnums.NORMAL.getCode());
         List<Topic> topicList = topicMapper.selectList(topicLambdaQueryWrapper);
-        // 查询所有的题目
-        LambdaQueryWrapper<Topic> topicLambdaQueryWrapper1 = new LambdaQueryWrapper<>();
-        topicLambdaQueryWrapper1.eq(Topic::getStatus, StatusEnums.NORMAL.getCode());
-        topicLambdaQueryWrapper1.eq(Topic::getIsDeleted,0);
-        List<Topic> topics = topicMapper.selectList(topicLambdaQueryWrapper1);
+        // 查询免费的题目
+        LambdaQueryWrapper<Topic> userTopicQueryWrapper = new LambdaQueryWrapper<>();
+        userTopicQueryWrapper.eq(Topic::getStatus, StatusEnums.NORMAL.getCode());
+        userTopicQueryWrapper.eq(Topic::getIsDeleted, 0);
+        userTopicQueryWrapper.eq(Topic::getIsMember, 0);
+        List<Topic> userTopics = topicMapper.selectList(userTopicQueryWrapper);
+        // 查询会员所有的题目
+        LambdaQueryWrapper<Topic> memberTopicQueryWrapper = new LambdaQueryWrapper<>();
+        memberTopicQueryWrapper.eq(Topic::getStatus, StatusEnums.NORMAL.getCode());
+        memberTopicQueryWrapper.eq(Topic::getIsDeleted, 0);
+        memberTopicQueryWrapper.eq(Topic::getIsMember, 1);
+        List<Topic> memberTopics = topicMapper.selectList(memberTopicQueryWrapper);
         // 查询出所有的用户id
         List<SysUser> allUser = securityFeignClient.getAllUser();
         if (CollectionUtils.isNotEmpty(topicList)) {
             // 获取到数量
             int size = topicList.size();
             // 不为空判断数量是否大于9个
-            if (size == 9) {
-                // 等于9个说明当日必刷全是管理员选的直接存公共的
-                for (Topic topic : topicList) {
-                    // 查询题目专题表
-                    LambdaQueryWrapper<TopicSubjectTopic> topicSubjectTopicLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getTopicId, topic.getId());
-                    TopicSubjectTopic topicSubjectTopicDb = topicSubjectTopicMapper.selectOne(topicSubjectTopicLambdaQueryWrapper);
-                    TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
-                    topicDailyStaging.setTopicId(topic.getId());
-                    topicDailyStaging.setSubjectId(topicSubjectTopicDb.getSubjectId());
-                    topicDailyStaging.setIsPublic(1);
-                    // 插入到每日必刷
-                    topicDailyStagingMapper.insert(topicDailyStaging);
-                }
-                return;
-            }
-            // 不是等于9说明还有空间算出剩余多少个
-            int randomTopicSize = 9 - size;
-            if (CollectionUtils.isNotEmpty(allUser)) {
-                for (SysUser sysUser : allUser) {
-                    // 根据用户id查询用户刷题表
-                    LambdaQueryWrapper<TopicRecord> topicRecordLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    topicRecordLambdaQueryWrapper.eq(TopicRecord::getUserId, sysUser.getId());
-                    List<TopicRecord> topicRecords = topicRecordMapper.selectList(topicRecordLambdaQueryWrapper);
-                    if (CollectionUtils.isEmpty(topicRecords)) {
-                        // 用户还没有刷过题目
-                        for (int i = 0; i < randomTopicSize; i++) {
-                            int randomIndex = new Random().nextInt(topics.size());
-                            Topic selectedTopic = topics.get(randomIndex);
-                            // 根据题目id查询专题id
-                            LambdaQueryWrapper<TopicSubjectTopic> topicSubjectTopicLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                            topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getTopicId, selectedTopic.getId());
-                            TopicSubjectTopic topicSubjectTopicDb = topicSubjectTopicMapper.selectOne(topicSubjectTopicLambdaQueryWrapper);
-                            TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
-                            topicDailyStaging.setTopicId(selectedTopic.getId());
-                            topicDailyStaging.setSubjectId(topicSubjectTopicDb.getSubjectId());
-                            topicDailyStaging.setIsPublic(1);
-                            topicDailyStagingMapper.insert(topicDailyStaging);
-                        }
-                    } else {
-                        // 用户刷过题目分析用户的刷题记录
-                        // 判断那个专题id用户刷的最多了
-                        Long subjectId = topicRecordMapper.selectMaxSubject(sysUser.getId());
-                        // 然后根据专题id查询专题表
-                        LambdaQueryWrapper<TopicSubject> topicSubjectLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                        topicSubjectLambdaQueryWrapper.eq(TopicSubject::getId, subjectId);
-                        TopicSubject topicSubject = topicSubjectMapper.selectOne(topicSubjectLambdaQueryWrapper);
-                        if (topicSubject != null) {
-                            // 找到用户刷的最多的专题信息了查询该专题下的所有题目
-                            // 查询题目专题表
-                            LambdaQueryWrapper<TopicSubjectTopic> topicSubjectTopicLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                            topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getSubjectId, topicSubject.getId());
-                            List<TopicSubjectTopic> topicSubjectTopics = topicSubjectTopicMapper.selectList(topicSubjectTopicLambdaQueryWrapper);
-                            // 判断
-                            if (CollectionUtils.isEmpty(topicSubjectTopics)) {
-                                continue;
-                            }
-                            // 存放所有的题目
-                            List<Topic> topicListAll = new ArrayList<>();
-                            // 查询所有的题目
-                            topicSubjectTopics.forEach(item -> {
-                                Long topicId = item.getTopicId();
-                                Topic topic = topicMapper.selectById(topicId);
-                                if (topic.getStatus() == 0 && topic.getIsMember() == 0 && topic.getIsEveryday() == 0) {
-                                    topicListAll.add(topic);
-                                }
-                            });
-                            // 已经拿到所有的题目了开始随机获取randomTopicSize个题目
-                            for (int i = 0; i < randomTopicSize; i++) {
-                                // 使用随机数抽取topicListAll中的任意一道
-                                int randomIndex = new Random().nextInt(topicListAll.size());
-                                Topic selectedTopic = topicListAll.get(randomIndex);
-                                TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
-                                topicDailyStaging.setTopicId(selectedTopic.getId());
-                                topicDailyStaging.setSubjectId(subjectId);
-                                topicDailyStaging.setIsPublic(2);
-                                topicDailyStaging.setUserId(sysUser.getId());
-                                topicDailyStagingMapper.insert(topicDailyStaging);
-                            }
-                        }
-                    }
-                }
-                return;
-            }
-        }
-        // 说明管理员没有设置每日题目
-        // 开始分配 5道随机题目 4道用户经常刷题目
-        if (CollectionUtils.isNotEmpty(topics)) {
-            for (int i = 0; i < 5; ) {
-                int randomIndex = new Random().nextInt(topics.size());
-                Topic selectedTopic = topics.get(randomIndex);
-                // 根据题目id查询专题id
+            // 等于9个说明当日必刷全是管理员选的直接存公共的
+            for (Topic topic : topicList) {
+                // 查询题目专题表
                 LambdaQueryWrapper<TopicSubjectTopic> topicSubjectTopicLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getTopicId, selectedTopic.getId());
+                topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getTopicId, topic.getId());
                 TopicSubjectTopic topicSubjectTopicDb = topicSubjectTopicMapper.selectOne(topicSubjectTopicLambdaQueryWrapper);
-                // 查询这个公共的题目是否存在了
-                // 查询这个公共的题目是否存在了
-                LambdaQueryWrapper<TopicDailyStaging> topicDailyStagingLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                topicDailyStagingLambdaQueryWrapper.eq(TopicDailyStaging::getTopicId, selectedTopic.getId())
-                        .eq(TopicDailyStaging::getIsPublic, 1);
-                if (topicDailyStagingMapper.selectOne(topicDailyStagingLambdaQueryWrapper) == null) {
-                    // 如果不存在，则插入新记录
-                    TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
-                    topicDailyStaging.setTopicId(selectedTopic.getId());
-                    topicDailyStaging.setSubjectId(topicSubjectTopicDb.getSubjectId());
-                    topicDailyStaging.setIsPublic(1);
-                    topicDailyStagingMapper.insert(topicDailyStaging);
+                TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
+                topicDailyStaging.setTopicId(topic.getId());
+                topicDailyStaging.setSubjectId(topicSubjectTopicDb.getSubjectId());
+                topicDailyStaging.setIsPublic(1);
+                // 插入到每日必刷
+                topicDailyStagingMapper.insert(topicDailyStaging);
+            }
+            if (size == 9) {
+                return;
+            }
+            // 计算需要补充的数量
+            int restSize = 9 - size;
+            // 提取userTopics中所有题目ID（去重，避免同一题目多次处理）
+            Set<Long> allTopicIds = userTopics.stream()
+                    .map(Topic::getId)
+                    .collect(Collectors.toSet()); // 去重，避免重复处理同一题目
+            // 从候选集中随机选择actualNeed个题目ID
+            List<Long> selectedIds = new ArrayList<>(allTopicIds);
+            Collections.shuffle(selectedIds); // 随机打乱
+            selectedIds = selectedIds.subList(0, restSize);
+            // 批量查询这些题目的subjectId（一次查询，减少数据库交互）
+            LambdaQueryWrapper<TopicSubjectTopic> subjectWrapper = new LambdaQueryWrapper<>();
+            subjectWrapper.in(TopicSubjectTopic::getTopicId, selectedIds);
+            List<TopicSubjectTopic> subjectList = topicSubjectTopicMapper.selectList(subjectWrapper);
+            // 转为Map便于快速查询：topicId -> subjectId
+            Map<Long, Long> topicSubjectMap = subjectList.stream()
+                    .collect(Collectors.toMap(
+                            TopicSubjectTopic::getTopicId,
+                            TopicSubjectTopic::getSubjectId
+                    ));
+            // 批量插入到TopicDailyStaging
+            List<TopicDailyStaging> insertList = selectedIds.stream()
+                    .map(topicId -> {
+                        TopicDailyStaging staging = new TopicDailyStaging();
+                        staging.setTopicId(topicId);
+                        staging.setSubjectId(topicSubjectMap.get(topicId)); // 从Map获取，无需重复查询
+                        staging.setIsPublic(1);
+                        return staging;
+                    })
+                    .collect(Collectors.toList());
+            // 批量插入（效率高于单条插入）
+            if (!insertList.isEmpty()) {
+                topicDailyStagingMapper.insertBatch(insertList); // 需确保Mapper支持批量插入
+            }
+        }
 
-                    // 成功插入后增加计数器
-                    i++;
+        List<Topic> allTopics = new ArrayList<>(userTopics);
+        allTopics.addAll(memberTopics);
+        for (SysUser sysUser : allUser) {
+            if (sysUser.getMemberTime() == null) {
+                continue;
+            }
+            // 根据用户id查询用户刷题表
+            LambdaQueryWrapper<TopicRecord> topicRecordLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            topicRecordLambdaQueryWrapper.eq(TopicRecord::getUserId, sysUser.getId());
+            List<TopicRecord> topicRecords = topicRecordMapper.selectList(topicRecordLambdaQueryWrapper);
+            if (CollectionUtils.isEmpty(topicRecords)) {
+                // 1.分配9道随机题目
+                int restSize = 9;
+                insertStaging(restSize, allTopics, sysUser.getId());
+            } else {
+                // 1.分配5道随机题目
+                int restSize = 5;
+                insertStaging(restSize, userTopics, sysUser.getId());
+                // 4道常刷题
+                Long frequentSubjectId = topicRecordMapper.selectMaxSubject(sysUser.getId());
+                LambdaQueryWrapper<TopicSubjectTopic> subjectTopicWrapper = new LambdaQueryWrapper<>();
+                subjectTopicWrapper.eq(TopicSubjectTopic::getSubjectId, frequentSubjectId);
+                List<TopicSubjectTopic> subjectTopicList = topicSubjectTopicMapper.selectList(subjectTopicWrapper);
+                if (CollectionUtils.isEmpty(subjectTopicList)) {
+                    return; // 专题下无题目，直接返回
+                }
+                Set<Long> topicIds = subjectTopicList.stream()
+                        .map(TopicSubjectTopic::getTopicId)
+                        .collect(Collectors.toSet());
+                LambdaQueryWrapper<TopicDailyStaging> userExistsWrapper = new LambdaQueryWrapper<>();
+                userExistsWrapper.eq(TopicDailyStaging::getUserId, sysUser.getId())
+                        .eq(TopicDailyStaging::getIsPublic, 2);
+                Set<Long> userExistsTopicIds = topicDailyStagingMapper.selectList(userExistsWrapper).stream()
+                        .map(TopicDailyStaging::getTopicId)
+                        .collect(Collectors.toSet());
+                List<Long> availableTopics = topicIds.stream()
+                        .filter(topicId -> !userExistsTopicIds.contains(topicId)) // 排除用户已有的
+                        .collect(Collectors.toCollection(ArrayList::new));
+                Collections.shuffle(availableTopics);
+                List<Long> selectedTopicIds = availableTopics.subList(0, 4);
+                List<Topic> selectedTopics = topicMapper.selectBatchIds(selectedTopicIds);
+                List<TopicDailyStaging> insertList = new ArrayList<>();
+                // 8. 批量插入：1次插入所有选中的题目（减少IO）
+                for (Topic topic : selectedTopics) {
+                    TopicDailyStaging staging = new TopicDailyStaging();
+                    staging.setTopicId(topic.getId());
+                    staging.setSubjectId(frequentSubjectId); // 复用常刷专题ID，无需再查
+                    staging.setUserId(sysUser.getId());
+                    staging.setIsPublic(2);
+                    insertList.add(staging);
+                }
+                if (!insertList.isEmpty()) {
+                    topicDailyStagingMapper.insertBatch(insertList); // 批量插入
                 }
             }
         }
-        // 在分配4道用户经常刷的题目
-        if (CollectionUtils.isNotEmpty(allUser)) {
-            for (SysUser sysUser : allUser) {
-                // 根据用户id查询用户刷题表
-                LambdaQueryWrapper<TopicRecord> topicRecordLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                topicRecordLambdaQueryWrapper.eq(TopicRecord::getUserId, sysUser.getId());
-                List<TopicRecord> topicRecords = topicRecordMapper.selectList(topicRecordLambdaQueryWrapper);
-                if (CollectionUtils.isEmpty(topicRecords)) {
-                    // 用户还没有每个人分个题目
-                    for (int i = 0; i < 4; ) {
-                        int randomIndex = new Random().nextInt(topics.size());
-                        Topic selectedTopic = topics.get(randomIndex);
-                        // 根据题目id查询专题id
-                        LambdaQueryWrapper<TopicSubjectTopic> topicSubjectTopicLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                        topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getTopicId, selectedTopic.getId());
-                        TopicSubjectTopic topicSubjectTopicDb = topicSubjectTopicMapper.selectOne(topicSubjectTopicLambdaQueryWrapper);
-                        // 查询这个用户中是否有这个题目
-                        LambdaQueryWrapper<TopicDailyStaging> topicDailyStagingLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                        topicDailyStagingLambdaQueryWrapper.eq(TopicDailyStaging::getTopicId, selectedTopic.getId())
-                                .eq(TopicDailyStaging::getIsPublic, 2)
-                                .eq(TopicDailyStaging::getUserId, sysUser.getId());
-                        if (topicDailyStagingMapper.selectOne(topicDailyStagingLambdaQueryWrapper) == null) {
-                            // 查询公共中是否有这个题目
-                            LambdaQueryWrapper<TopicDailyStaging> topicDailyStagingLambdaQueryWrapper1 = new LambdaQueryWrapper<>();
-                            topicDailyStagingLambdaQueryWrapper1.eq(TopicDailyStaging::getIsPublic, 1);
-                            topicDailyStagingLambdaQueryWrapper1.eq(TopicDailyStaging::getTopicId, selectedTopic.getId());
-                            if (topicDailyStagingMapper.selectOne(topicDailyStagingLambdaQueryWrapper1) == null) {
-                                // 如果存在，则插入新记录
-                                TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
-                                topicDailyStaging.setTopicId(selectedTopic.getId());
-                                topicDailyStaging.setSubjectId(topicSubjectTopicDb.getSubjectId());
-                                topicDailyStaging.setIsPublic(2);
-                                topicDailyStaging.setUserId(sysUser.getId());
-                                topicDailyStagingMapper.insert(topicDailyStaging);
+    }
 
-                                // 成功插入后增加计数器
-                                i++;
-                            }
-
-                        }
-                    }
-                } else {
-                    // 用户刷过题目分析用户的刷题记录
-                    // 判断那个专题id用户刷的最多了
-                    Long subjectId = topicRecordMapper.selectMaxSubject(sysUser.getId());
-                    // 然后根据专题id查询专题表
-                    LambdaQueryWrapper<TopicSubject> topicSubjectLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    topicSubjectLambdaQueryWrapper.eq(TopicSubject::getId, subjectId);
-                    TopicSubject topicSubject = topicSubjectMapper.selectOne(topicSubjectLambdaQueryWrapper);
-                    if (topicSubject != null) {
-                        // 找到用户刷的最多的专题信息了查询该专题下的所有题目
-                        // 查询题目专题表
-                        LambdaQueryWrapper<TopicSubjectTopic> topicSubjectTopicLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                        topicSubjectTopicLambdaQueryWrapper.eq(TopicSubjectTopic::getSubjectId, topicSubject.getId());
-                        List<TopicSubjectTopic> topicSubjectTopics = topicSubjectTopicMapper.selectList(topicSubjectTopicLambdaQueryWrapper);
-                        // 判断
-                        if (CollectionUtils.isEmpty(topicSubjectTopics)) {
-                            continue;
-                        }
-                        // 存放所有的题目
-                        List<Topic> topicListAll = new ArrayList<>();
-                        // 查询所有的题目
-                        topicSubjectTopics.forEach(item -> {
-                            Long topicId = item.getTopicId();
-                            Topic topic = topicMapper.selectById(topicId);
-                            if (topic.getStatus() == 0 && topic.getIsMember() == 0 && topic.getIsEveryday() == 0) {
-                                topicListAll.add(topic);
-                            }
-                        });
-                        // 已经拿到所有的题目了开始随机获取randomTopicSize个题目
-                        for (int i = 0; i < 4; ) {
-                            // 使用随机数抽取topicListAll中的任意一道
-                            int randomIndex = new Random().nextInt(topicListAll.size());
-                            Topic selectedTopic = topicListAll.get(randomIndex);
-                            // 查询一下用户中有没有重复的
-                            LambdaQueryWrapper<TopicDailyStaging> eq = new LambdaQueryWrapper<TopicDailyStaging>()
-                                    .eq(TopicDailyStaging::getTopicId, selectedTopic.getId())
-                                    .eq(TopicDailyStaging::getUserId, sysUser.getId())
-                                    .eq(TopicDailyStaging::getIsPublic, 2);
-                            if (topicDailyStagingMapper.selectOne(eq) == null) {
-                                // 查询公共中是否存了这个题目
-                                LambdaQueryWrapper<TopicDailyStaging> topicDailyStagingLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                                topicDailyStagingLambdaQueryWrapper.eq(TopicDailyStaging::getIsPublic, 1);
-                                topicDailyStagingLambdaQueryWrapper.eq(TopicDailyStaging::getTopicId, selectedTopic.getId());
-                                if (topicDailyStagingMapper.selectOne(topicDailyStagingLambdaQueryWrapper) == null) {
-                                    TopicDailyStaging topicDailyStaging = new TopicDailyStaging();
-                                    topicDailyStaging.setTopicId(selectedTopic.getId());
-                                    topicDailyStaging.setSubjectId(subjectId);
-                                    topicDailyStaging.setIsPublic(2);
-                                    topicDailyStaging.setUserId(sysUser.getId());
-                                    topicDailyStagingMapper.insert(topicDailyStaging);
-                                    i++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    private void insertStaging(int restSize, List<Topic> allTopics, Long userId) {
+        Set<Long> allTopicIds = allTopics.stream()
+                .map(Topic::getId)
+                .collect(Collectors.toSet()); // 去重，避免重复处理同一题目
+        // 从候选集中随机选择actualNeed个题目ID
+        List<Long> selectedIds = new ArrayList<>(allTopicIds);
+        Collections.shuffle(selectedIds); // 随机打乱
+        selectedIds = selectedIds.subList(0, restSize); // 取前size个
+        // 批量查询这些题目的subjectId（一次查询，减少数据库交互）
+        LambdaQueryWrapper<TopicSubjectTopic> subjectWrapper = new LambdaQueryWrapper<>();
+        subjectWrapper.in(TopicSubjectTopic::getTopicId, selectedIds);
+        List<TopicSubjectTopic> subjectList = topicSubjectTopicMapper.selectList(subjectWrapper);
+        // 转为Map便于快速查询：topicId -> subjectId
+        Map<Long, Long> topicSubjectMap = subjectList.stream()
+                .collect(Collectors.toMap(
+                        TopicSubjectTopic::getTopicId,
+                        TopicSubjectTopic::getSubjectId
+                ));
+        // 批量插入到TopicDailyStaging
+        List<TopicDailyStaging> insertList = selectedIds.stream()
+                .map(topicId -> {
+                    TopicDailyStaging staging = new TopicDailyStaging();
+                    staging.setTopicId(topicId);
+                    staging.setSubjectId(topicSubjectMap.get(topicId)); // 从Map获取，无需重复查询
+                    staging.setUserId(userId);
+                    staging.setIsPublic(2);
+                    return staging;
+                })
+                .collect(Collectors.toList());
+        // 批量插入（效率高于单条插入）
+        if (!insertList.isEmpty()) {
+            topicDailyStagingMapper.insertBatch(insertList); // 需确保Mapper支持批量插入
         }
     }
 }
